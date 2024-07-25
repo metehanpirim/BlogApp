@@ -18,6 +18,7 @@ builder.Services.AddDbContextPool<BlogContext>( options => {
 
 builder.Services.AddScoped<IPostRepository, PostRepository>();
 builder.Services.AddScoped<ITagRepository, TagRepository>();
+builder.Services.AddScoped<ICommentRepository, CommentRepository>();
 
 var app = builder.Build();
 
@@ -28,7 +29,7 @@ SeedData.FillTestData(app);
 
 app.MapControllerRoute(
     name: "post_details",
-    pattern: "/posts/{slug}",
+    pattern: "/posts/details/{slug}",
     defaults: new {controller = "Post", action = "Details"}
 );
 
