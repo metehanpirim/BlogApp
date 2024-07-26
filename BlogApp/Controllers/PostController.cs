@@ -38,15 +38,22 @@ namespace BlogApp.Controllers
             .FirstOrDefaultAsync(p => p.Url == slug));
         }
 
-        public IActionResult AddComment(int PostId, string UserName, string Text, string Url){
+        public JsonResult AddComment(int PostId, string UserName, string Text){
+
             var comment = new Comment{
                 Text = Text,
-                PublishedOn = DateTime.Now,
+                PublishedOn = DateTime.Now.AddSeconds(1),
                 PostId = PostId,
                 User = new User{ UserName = UserName, Image = "anonymous.jpg"}
             };
             _commentRepository.AddComment(comment);
-            return RedirectToRoute("post_details", new {slug = Url});
+
+            return Json( new{
+                userName = comment.User.UserName,
+                text = comment.Text,
+                publishedOn = comment.PublishedOn,
+                image = comment.User.Image
+            });
 
         }
 
