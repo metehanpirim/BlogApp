@@ -1,6 +1,7 @@
 using BlogApp.Data.Abstract;
 using BlogApp.Data.Concrete;
 using BlogApp.Data.Concrete.EfCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,11 +20,17 @@ builder.Services.AddDbContextPool<BlogContext>( options => {
 builder.Services.AddScoped<IPostRepository, PostRepository>();
 builder.Services.AddScoped<ITagRepository, TagRepository>();
 builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
 
 var app = builder.Build();
 
 //to use static files under wwwroot
 app.UseStaticFiles();
+
+app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
 
 SeedData.FillTestData(app);
 
@@ -41,7 +48,7 @@ app.MapControllerRoute(
 
 app.MapControllerRoute(
     name: "Default",
-    pattern: "{controller=Post}/{action=Index}/{id?}"
+    pattern: "{controller=User}/{action=Login}/{id?}"
 );
 
 app.Run();

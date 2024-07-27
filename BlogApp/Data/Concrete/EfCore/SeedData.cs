@@ -25,8 +25,19 @@ namespace BlogApp.Data.Concrete.EfCore
                     }
 
                     if(!context.Users.Any()){
-                        context.Users.Add( new User { UserName = "Metehan Pirim", Image = "user1.jpg"} );
-                        context.Users.Add( new User { UserName = "Efe Karaman", Image = "user2.jpg"} );
+                        context.Users.Add( new User {
+                                UserName = "metehanpirim",
+                                FullName="Metehan Pirim",
+                                Email="metehanpirim@gmail.com",
+                                Password="admin123", 
+                                Image = "user1.jpg",        
+                            });
+                        context.Users.Add( new User { UserName = "aliveli",
+                                FullName="Ali Veli",
+                                Email="aliveli@gmail.com",
+                                Password="admin123",
+                                Image = "user2.jpg"
+                            } );
                         context.SaveChanges();
                     }
 
