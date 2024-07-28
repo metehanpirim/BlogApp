@@ -48,7 +48,7 @@ app.MapControllerRoute(
 
 app.MapControllerRoute(
     name: "Default",
-    pattern: "{controller=User}/{action=Login}/{id?}"
+    pattern: "{controller=Post}/{action=Index}/{id?}"
 );
 
 app.Run();

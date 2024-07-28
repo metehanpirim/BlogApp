@@ -20,6 +20,9 @@ namespace BlogApp.Controllers
         }
 
         public IActionResult Login(){
+            if(User.Identity!.IsAuthenticated){
+                return RedirectToAction("index", "post");
+            }
             return View();
         }
 
@@ -50,6 +53,11 @@ namespace BlogApp.Controllers
             }
             ModelState.AddModelError("", "Please check the fields!");
             return View(model);
+        }
+
+        public async Task<IActionResult> Logout(){
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Login");
         }
     }
 }
