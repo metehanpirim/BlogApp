@@ -3,7 +3,7 @@
     <div class="bg-white p-4">
         <div class="col-12">
             <h1>Login</h1>
-            <form action="/user/Login" method="post">
+            <form action="/user/Login" method="post" novalidate>
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <div class="mb-3">
                     <label asp-for="Email" class="form-label"></label>

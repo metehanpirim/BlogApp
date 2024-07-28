@@ -19,6 +19,37 @@ namespace BlogApp.Controllers
             _userRepository = userRepository;
         }
 
+        public IActionResult Register(){
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Register(RegisterViewModel model){
+            if(ModelState.IsValid){
+
+                var user = _userRepository.Users.FirstOrDefault(u => u.Email == model.Email || u.UserName == model.UserName);
+                if(user == null){
+                    _userRepository.CreateUser(
+                        new Entity.User{
+                            UserName = model.UserName,
+                            FullName = model.FullName,
+                            Email = model.Email,
+                            Password = model.Password,
+                            Image = "anonymous.jpg"
+                        }
+                    );
+                    return RedirectToAction("Login");
+                }
+                else{
+                    ModelState.AddModelError("", "Given user already exists!");
+                    return View(model);
+                }
+            }
+            else{
+                return View(model);
+            }
+        }
+
         public IActionResult Login(){
             if(User.Identity!.IsAuthenticated){
                 return RedirectToAction("index", "post");
@@ -31,12 +62,13 @@ namespace BlogApp.Controllers
             if(ModelState.IsValid){
                 var user = _userRepository.Users.FirstOrDefault(u => u.Email == model.Email && u.Password == model.Password);
                 if(user != null){
-                    var userClaims = new List<Claim>();
-
-                    userClaims.Add(new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()));
-                    userClaims.Add(new Claim(ClaimTypes.Name, user.UserName ?? ""));
-                    userClaims.Add(new Claim(ClaimTypes.GivenName, user.FullName ?? ""));
-                    userClaims.Add(new Claim(ClaimTypes.UserData, user.Image ?? ""));
+                    var userClaims = new List<Claim>
+                    {
+                        new(ClaimTypes.NameIdentifier, user.UserId.ToString()),
+                        new(ClaimTypes.Name, user.UserName ?? ""),
+                        new(ClaimTypes.GivenName, user.FullName ?? ""),
+                        new(ClaimTypes.UserData, user.Image ?? "")
+                    };
 
                     var ClaimsIdentity = new ClaimsIdentity(userClaims, CookieAuthenticationDefaults.AuthenticationScheme);
 
