@@ -36,6 +36,7 @@ namespace BlogApp.Controllers
                     userClaims.Add(new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString()));
                     userClaims.Add(new Claim(ClaimTypes.Name, user.UserName ?? ""));
                     userClaims.Add(new Claim(ClaimTypes.GivenName, user.FullName ?? ""));
+                    userClaims.Add(new Claim(ClaimTypes.UserData, user.Image ?? ""));
 
                     var ClaimsIdentity = new ClaimsIdentity(userClaims, CookieAuthenticationDefaults.AuthenticationScheme);
 

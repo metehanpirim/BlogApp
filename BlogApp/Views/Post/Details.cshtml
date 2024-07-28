@@ -35,26 +35,26 @@
                             }
                         </div>
                         
-                        <hr class="my-4">
-                        <div>
-                            <h4>Add Comment</h4>
-                            <form action="/post/AddComment" method="post">
-                                <input type="hidden" id="PostId" name="PostId" value="@Model.PostId">
-                                <div class="col-md-12">
-                                    <label for="UserName" class="form-label">Username</label>
-                                    <input type="text" name="UserName" id="UserName" class="form-control">
-                                </div>
-
-                                <div class="col-md-12">
-                                    <label for="Text" class="form-label">Comment</label>
-                                    <textarea type="text" name="Text" id="Text" rows="3" class="form-control"></textarea>
-                                </div>
-
-                                <div class="col-md-12">
-                                    <button id="btnSaveComment" type="submit" class="btn btn-primary">Add</button>
-                                </div>
-                            </form>
-                        </div>
+                        @if(User.Identity!.IsAuthenticated){
+                            <hr class="my-4">
+                            <div>
+                                <h4>Add Comment</h4>
+                                <form action="/post/AddComment" method="post">
+                                    <input type="hidden" id="PostId" name="PostId" value="@Model.PostId">
+                                    <div class="col-md-12">
+                                        <label for="Text" class="form-label">Comment</label>
+                                        <textarea type="text" name="Text" id="Text" rows="3" class="form-control my-2"></textarea>
+                                    </div>
+                                    
+                                    <div class="col-md-12">
+                                        <button id="btnSaveComment" type="submit" class="btn btn-primary">Add</button>
+                                    </div>
+                                </form>
+                            </div>
+                        }
+                        else{
+                            <p class="h5">Please <a href="/user/login">login</a> to add comment!</p>
+                        }
                     </div>
                 </div>
 

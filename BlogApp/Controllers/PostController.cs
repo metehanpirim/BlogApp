@@ -1,4 +1,5 @@
 using System.IO.Compression;
+using System.Security.Claims;
 using BlogApp.Data.Abstract;
 using BlogApp.Data.Concrete.EfCore;
 using BlogApp.Entity;
@@ -39,20 +40,22 @@ namespace BlogApp.Controllers
         }
 
         public JsonResult AddComment(int PostId, string UserName, string Text){
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var userName = User.FindFirstValue(ClaimTypes.Name);
 
             var comment = new Comment{
                 Text = Text,
                 PublishedOn = DateTime.Now.AddSeconds(1),
                 PostId = PostId,
-                User = new User{ UserName = UserName, Image = "anonymous.jpg"}
+                UserId = int.Parse(userId ?? "")
             };
             _commentRepository.AddComment(comment);
 
             return Json( new{
-                userName = comment.User.UserName,
+                userName = userName,
                 text = comment.Text,
                 publishedOn = comment.PublishedOn,
-                image = comment.User.Image
+                image = User.FindFirstValue(ClaimTypes.UserData)
             });
 
         }
