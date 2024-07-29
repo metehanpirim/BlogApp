@@ -60,5 +60,39 @@ namespace BlogApp.Controllers
 
         }
 
+        public IActionResult Create(){
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult Create(PostCreateViewModel model){
+            if(ModelState.IsValid){
+
+                var post = _postRepository.Posts.FirstOrDefault(p => p.Url == model.Url);
+
+                if(post == null){
+                    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? "";
+
+                    _postRepository.CratePost(new Post{
+                        UserId = int.Parse(userId),
+                        Title = model.Title,
+                        Content = model.Content,
+                        Description = model.Description,
+                        Url = model.Url,
+                        PublishedOn = DateTime.Now.AddSeconds(1),
+                        Image = "6.jpg",
+                        IsActive = false
+                    });
+
+                    return RedirectToAction("Index", "Post");
+                }
+                else{
+                    ModelState.AddModelError("", "A post exists with the given url!");
+                    return View(model);
+                }
+            }
+            return View(model);
+        }
+
     }
 }
