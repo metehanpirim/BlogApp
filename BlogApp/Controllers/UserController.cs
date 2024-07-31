@@ -70,6 +70,9 @@ namespace BlogApp.Controllers
                         new(ClaimTypes.UserData, user.Image ?? "")
                     };
 
+                    if(user.Email == "metehanpirim@gmail.com")
+                        userClaims.Add(new Claim(ClaimTypes.Role, "admin"));
+
                     var ClaimsIdentity = new ClaimsIdentity(userClaims, CookieAuthenticationDefaults.AuthenticationScheme);
 
                     var authProperties = new AuthenticationProperties{
