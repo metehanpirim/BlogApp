@@ -6,7 +6,9 @@ namespace BlogApp.Data.Abstract
 
         IQueryable<Post> Posts{ get; }
 
-        void CratePost(Post post);
+        void CreatePost(Post post);
+
+        void EditPost(Post post);
 
     }
 }
