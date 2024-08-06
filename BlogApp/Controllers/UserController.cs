@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO.Compression;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ using BlogApp.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace BlogApp.Controllers
 {
@@ -94,6 +96,22 @@ namespace BlogApp.Controllers
         public async Task<IActionResult> Logout(){
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Login");
+        }
+
+        public IActionResult Profile(string username){
+            if(string.IsNullOrEmpty(username)){
+                return NotFound();
+            }
+            var user = _userRepository
+                        .Users
+                        .Include( u => u.Posts)
+                        .Include( u => u.Comments)
+                        .ThenInclude( c => c.Post)
+                        .FirstOrDefault( u => u.UserName == username);
+            if(user == null)
+                return NotFound();
+
+            return View(user);
         }
     }
 }

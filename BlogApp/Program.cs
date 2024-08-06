@@ -49,6 +49,12 @@ app.MapControllerRoute(
 );
 
 app.MapControllerRoute(
+    name: "profile",
+    pattern: "/user/{username}",
+    defaults: new {controller = "User", action = "Profile"}
+);
+
+app.MapControllerRoute(
     name: "Default",
     pattern: "{controller=Post}/{action=Index}/{id?}"
 );
