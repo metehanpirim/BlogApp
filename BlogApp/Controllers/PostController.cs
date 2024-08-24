@@ -120,10 +120,12 @@ namespace BlogApp.Controllers
                 return NotFound();
             }
 
-            var post = _postRepository.Posts.Where( p => p.PostId == id).FirstOrDefault();
+            var post = _postRepository.Posts.Include( p => p.Tags).Where( p => p.PostId == id).FirstOrDefault();
             if(post == null){
                 return NotFound();
             }
+
+            ViewBag.Tags = _tagRepository.Tags.ToList();
 
 
             return View( new PostCreateViewModel{
@@ -132,13 +134,14 @@ namespace BlogApp.Controllers
                 Description = post.Description,
                 Content = post.Content,
                 Url = post.Url,
-                IsActive = post.IsActive
+                IsActive = post.IsActive,
+                Tags = post.Tags
             });
         }
 
         [Authorize]
         [HttpPost]
-        public IActionResult Edit(PostCreateViewModel model){
+        public IActionResult Edit(PostCreateViewModel model, int[] tagIds){
 
             if(ModelState.IsValid){
                 var postEntityToSave = new Post{
@@ -149,7 +152,7 @@ namespace BlogApp.Controllers
                     Url = model.Url,
                     IsActive = model.IsActive
                 };
-                _postRepository.EditPost(postEntityToSave);
+                _postRepository.EditPost(postEntityToSave, tagIds);
                 return RedirectToAction("List");
             }
             return View(model);

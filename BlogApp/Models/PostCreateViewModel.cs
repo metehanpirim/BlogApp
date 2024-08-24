@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using BlogApp.Entity;
 
 namespace BlogApp.Models
 {
@@ -28,5 +29,7 @@ namespace BlogApp.Models
         public string? Url { get; set; }
 
         public bool IsActive { get; set; }
+
+        public List<Tag>? Tags { get; set; }
     }
 }

@@ -49,14 +49,14 @@ app.MapControllerRoute(
 );
 
 app.MapControllerRoute(
-    name: "profile",
-    pattern: "/user/{username}",
-    defaults: new {controller = "User", action = "Profile"}
+    name: "Default",
+    pattern: "{controller=Post}/{action=Index}/{id?}"
 );
 
 app.MapControllerRoute(
-    name: "Default",
-    pattern: "{controller=Post}/{action=Index}/{id?}"
+    name: "profile",
+    pattern: "/user/{username}",
+    defaults: new {controller = "User", action = "Profile"}
 );
 
 app.Run();
